@@ -5,8 +5,10 @@
  */
 package clasificadoresSupervisados;
 
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.util.ArrayList;
 import objetos.Patron;
+import objetos.PatronRepresentativo;
 
 /**
  *
@@ -14,14 +16,59 @@ import objetos.Patron;
  */
 public class MinimaDistancia implements ClasificadorSupervisado{
 
+    private ArrayList<PatronRepresentativo> representativos;
+
+    public MinimaDistancia() {
+        this.representativos = new ArrayList<>();
+    }
+    
+    
     @Override
     public void entrena(ArrayList<Patron> instancias) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // agregamos el primer representativo
+    this.representativos.add(new PatronRepresentativo(
+            instancias.get(0).getCaracteristicas(),
+            instancias.get(0).getClaseOriginal()));
+    // recorrer la coleccion de patrones 
+    for (int i=1; i < instancias.size();i=i+1){
+        Patron patron = instancias.get(i);
+        // buscar en los presentativos
+        buscayAcumula(patron);
+    }
+        
+       
+        
     }
 
     @Override
     public void clasifica(Patron patron) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void buscayAcumula(Patron patron) {
+        // buscar en la coleccion de represantes
+        for (int i=0; i < this.representativos.size();i++){
+            //verificamos que exista 
+            if (patron.getClaseOriginal().equals(
+            this.representativos.get(i).getClaseOriginal())){
+            // contamos
+            this.representativos.get(i).setNumPatrones(this.representativos.get(i).getNumPatrones()+1);
+            // acumulamos
+            for(int j=0; j<this.representativos.get(i).getCaracteristicas().length
+                    ;j++){
+                
+            this.representativos.get(i).getCaracteristicas()[j]+=patron.getCaracteristicas()[j];
+            }
+            break;
+            }else{
+            // agrega 
+            this.representativos.add(new PatronRepresentativo(
+                    patron.getCaracteristicas(),
+                    patron.getClaseOriginal()));
+            break;
+            }
+        }
+       // TODO: ESTA MAL DEL ACUMULADO 
     }
     
 }
