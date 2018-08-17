@@ -35,6 +35,14 @@ public class MinimaDistancia implements ClasificadorSupervisado{
         // buscar en los presentativos
         buscayAcumula(patron);
     }
+    // calcular la media 
+    for (PatronRepresentativo pr: this.representativos){
+        // recorremos por caracteristicas
+        for (int j=0;j<pr.getCaracteristicas().length;j++){
+             pr.getCaracteristicas()[j]/=pr.getNumPatrones();
+        
+        }
+    }
         
        
         
@@ -46,6 +54,7 @@ public class MinimaDistancia implements ClasificadorSupervisado{
     }
 
     private void buscayAcumula(Patron patron) {
+        int m = -1;
         // buscar en la coleccion de represantes
         for (int i=0; i < this.representativos.size();i++){
             //verificamos que exista 
@@ -59,16 +68,18 @@ public class MinimaDistancia implements ClasificadorSupervisado{
                 
             this.representativos.get(i).getCaracteristicas()[j]+=patron.getCaracteristicas()[j];
             }
+            m = i;
             break;
-            }else{
-            // agrega 
+            }
+            
+            }
+        
+         if (m==-1){
+         // agrega 
             this.representativos.add(new PatronRepresentativo(
                     patron.getCaracteristicas(),
                     patron.getClaseOriginal()));
-            break;
-            }
-        }
-       // TODO: ESTA MAL DEL ACUMULADO 
+           
+         }
     }
-    
 }
