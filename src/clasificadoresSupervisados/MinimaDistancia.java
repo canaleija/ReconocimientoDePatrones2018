@@ -6,6 +6,7 @@
 package clasificadoresSupervisados;
 
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
+import herramientas.HerramientasClasificadores;
 import java.util.ArrayList;
 import objetos.Patron;
 import objetos.PatronRepresentativo;
@@ -50,7 +51,20 @@ public class MinimaDistancia implements ClasificadorSupervisado{
 
     @Override
     public void clasifica(Patron patron) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // hipotesis
+        double distMenor = HerramientasClasificadores.calcularDistEucli(patron, 
+                this.representativos.get(0));
+        System.out.println(distMenor);
+        patron.setClaseResultante(this.representativos.get(0).getClaseOriginal());
+        for(int j=1; j < this.representativos.size();j++){
+        double dist = HerramientasClasificadores.calcularDistEucli(patron, 
+                this.representativos.get(j));
+        System.out.println(dist);
+        if (dist<distMenor){
+         distMenor = dist;
+         patron.setClaseResultante(this.representativos.get(j).getClaseOriginal());
+        }
+        }
     }
 
     private void buscayAcumula(Patron patron) {
@@ -82,4 +96,7 @@ public class MinimaDistancia implements ClasificadorSupervisado{
            
          }
     }
+    
+    
+  
 }

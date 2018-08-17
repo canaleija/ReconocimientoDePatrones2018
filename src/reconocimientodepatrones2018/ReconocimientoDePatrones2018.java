@@ -6,6 +6,7 @@
 package reconocimientodepatrones2018;
 
 import clasificadoresSupervisados.MinimaDistancia;
+import herramientas.HerramientasClasificadores;
 import herramientas.Tokenizador;
 import java.util.ArrayList;
 import javax.swing.text.html.MinimalHTMLWriter;
@@ -23,9 +24,13 @@ public class ReconocimientoDePatrones2018 {
     public static void main(String[] args) {
        Tokenizador.leerDatos();
         ArrayList<Patron> aux = Tokenizador.instancias;
+       double res = HerramientasClasificadores.calcularDistEucli(Tokenizador.instancias.get(0),
+                               Tokenizador.instancias.get(1));
         MinimaDistancia md = new MinimaDistancia();
-        md.entrena(Tokenizador.instancias);
-        System.out.println();
+       md.entrena(Tokenizador.instancias);
+       Patron a = new Patron(new double[]{4.9,3.0,1.4,0.2},"desconocida");
+        md.clasifica(a);
+       System.out.println(res);
     }
     
 }
