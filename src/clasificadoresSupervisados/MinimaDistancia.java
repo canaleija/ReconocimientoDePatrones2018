@@ -18,9 +18,11 @@ import objetos.PatronRepresentativo;
 public class MinimaDistancia implements ClasificadorSupervisado{
 
     private ArrayList<PatronRepresentativo> representativos;
-
+    private double eficacia;
+    
     public MinimaDistancia() {
         this.representativos = new ArrayList<>();
+        this.eficacia=0;
     }
     
     
@@ -54,12 +56,12 @@ public class MinimaDistancia implements ClasificadorSupervisado{
         // hipotesis
         double distMenor = HerramientasClasificadores.calcularDistEucli(patron, 
                 this.representativos.get(0));
-        System.out.println(distMenor);
+       
         patron.setClaseResultante(this.representativos.get(0).getClaseOriginal());
         for(int j=1; j < this.representativos.size();j++){
         double dist = HerramientasClasificadores.calcularDistEucli(patron, 
                 this.representativos.get(j));
-        System.out.println(dist);
+       
         if (dist<distMenor){
          distMenor = dist;
          patron.setClaseResultante(this.representativos.get(j).getClaseOriginal());
@@ -67,6 +69,18 @@ public class MinimaDistancia implements ClasificadorSupervisado{
         }
     }
 
+    public void clasificaConjunto(ArrayList<Patron> instancias){
+    // recorremos la coleccion a clasificar
+        int total = instancias.size();
+        // contador de clasificacion correctas
+        int aux = 0;
+        for (Patron patron: instancias){
+            clasifica(patron);
+            if(patron.getClaseResultante().equals(patron.getClaseOriginal()))aux++;
+        }
+       this.eficacia = aux*100/total;
+    }
+       
     private void buscayAcumula(Patron patron) {
         int m = -1;
         // buscar en la coleccion de represantes
@@ -95,6 +109,10 @@ public class MinimaDistancia implements ClasificadorSupervisado{
                     patron.getClaseOriginal()));
            
          }
+    }
+
+    public double getEficacia() {
+        return eficacia;
     }
     
     
