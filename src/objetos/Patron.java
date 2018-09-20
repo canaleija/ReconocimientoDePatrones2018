@@ -63,6 +63,13 @@ public class Patron {
     public void setClaseResultante(String claseResultante) {
         this.claseResultante = claseResultante;
     }
+
+    /**
+     * @param caracteristicas the caracteristicas to set
+     */
+    public void setCaracteristicas(double[] caracteristicas) {
+        this.caracteristicas = caracteristicas;
+    }
     
     
 }
