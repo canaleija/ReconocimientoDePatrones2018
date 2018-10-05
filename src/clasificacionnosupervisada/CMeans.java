@@ -5,6 +5,7 @@
  */
 package clasificacionnosupervisada;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 import objetos.Patron;
@@ -18,7 +19,7 @@ public class CMeans {
     private ArrayList<Patron> instancias;
     // numero de clusters
     private int c;
-    // centroides 
+    // centroidesIniciales 
     private ArrayList<Patron[]> centroides;
     int[] contadores;  
     public CMeans(ArrayList<Patron> instancias, int c) {
@@ -26,25 +27,37 @@ public class CMeans {
         this.centroides = new ArrayList<>();
         this.c = c;
     }
-   
-    public void clasifica (){
-     // generar mis centroides iniciales aleatorios 
+    
+    public void clasifica(){
+     // generar mis centroidesIniciales iniciales aleatorios 
      Random ran = new Random();
-     Patron[] centroides = new Patron[c];
+     Patron[] centroidesIniciales = new Patron[c];
      for (int x=0; x < this.c;x++){
        int pos = ran.nextInt(this.instancias.size());
-       centroides[x] = new Patron(this.instancias.get(pos).getCaracteristicas().clone(),"Centroide"+x);
+       centroidesIniciales[x] = new Patron(this.instancias.get(pos).getCaracteristicas().clone(),"Centroide"+x);
      }
-     // agregamos a la coleccion de centroides los centroides iniciales
-     this.getCentroides().add(centroides);
+     // agregamos a la coleccion de centroidesIniciales los centroidesIniciales iniciales
+     this.getCentroides().add(centroidesIniciales);
+     calcularClusters();
+    }
+       
+    
+    public void clasifica(Patron[] centroidesIniciales){
+     this.getCentroides().add(centroidesIniciales);
+     calcularClusters();
+    }
+       
+   
+    private void calcularClusters (){
+    
      // etiquetar por primera ocasiÃ³n (clasificar por primera ocasiÃ³n)
-     etiquetar(centroides);
+     etiquetar(this.centroides.get(0));
      // generar un proceso iterativo 
-     // que modifique o ajuste los centroides
+     // que modifique o ajuste los centroidesIniciales
      int contador = 0;
      
      do {
-        // recalcular centroides
+        // recalcular centroidesIniciales
         // necesitamos donde acumular 
         Patron[] centroidesNuevos = new Patron[c];
         contadores = new int[c];
@@ -60,7 +73,7 @@ public class CMeans {
              }
             }
         }
-        // agregar los centroides a la coleccion
+        // agregar los centroidesIniciales a la coleccion
         this.getCentroides().add(centroidesNuevos);
         // dividimos 
         dividirUltimosCentroides(contadores);
@@ -94,7 +107,7 @@ public class CMeans {
     }
 
     private boolean verificaCentroides() {
-        // verificar si los centroides nuevos
+        // verificar si los centroidesIniciales nuevos
         // son iguales a los anteriores
        int numCentroides = this.getCentroides().size();
        Patron[] ultimo = this.getCentroides().get(numCentroides-1);
@@ -136,7 +149,7 @@ public class CMeans {
     }
 
     /**
-     * @return the centroides
+     * @return the centroidesIniciales
      */
     public ArrayList<Patron[]> getCentroides() {
         return centroides;
