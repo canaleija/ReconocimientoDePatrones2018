@@ -7,6 +7,7 @@ package reconocimientodepatrones2018;
 
 import clasificacionnosupervisada.CMeans;
 import clasificadoresSupervisados.Knn;
+import clasificadoresSupervisados.NaiveBayes;
 import herramientas.GeneradorInstancias;
 import herramientas.Grafica;
 import herramientas.IOImage;
@@ -30,13 +31,10 @@ public class ReconocimientoDePatrones2018 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Image imagenOriginal = IOImage.abrirImagen();
-        JFrameImagen fo = new JFrameImagen(imagenOriginal);
-        fo.setVisible(true);
-        ClusterImagenes ci = new ClusterImagenes();
-        Image imagenRes = ci.calcularClusters(imagenOriginal, 3);
-        JFrameImagen fr = new JFrameImagen(imagenRes);
-        fr.setVisible(true);
+        Tokenizador.leerDatos();
+        NaiveBayes bayes = new NaiveBayes();
+        bayes.entrena(Tokenizador.instancias);
+        bayes.clasifica(new Patron(new double[]{6,130,8},"Desconocida"));
         System.out.println();
     }
     
