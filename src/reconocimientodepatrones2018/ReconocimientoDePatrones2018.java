@@ -34,7 +34,7 @@ public class ReconocimientoDePatrones2018 {
         Tokenizador.leerDatos();
         NaiveBayes bayes = new NaiveBayes();
         bayes.entrena(Tokenizador.instancias);
-        bayes.clasifica(new Patron(new double[]{6,130,8},"Desconocida"));
+        bayes.clasifica(new Patron(new double[]{6,180,12},"Desconocida"));
         System.out.println();
     }
     

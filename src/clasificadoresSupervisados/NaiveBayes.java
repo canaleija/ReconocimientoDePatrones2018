@@ -71,25 +71,44 @@ public class NaiveBayes implements ClasificadorSupervisado{
           new double[this.clases.size()][patron.getCaracteristicas().length];
        // calcular una matriz de distribuciones normales parametrizadas
        int r = 0;
+       double evidencia=0;
        for(Entry<String,ClaseBayes> aux: this.clases.entrySet()){
            Patron media = aux.getValue().getMedia();
            Patron varianza = aux.getValue().getVarianza();
+           double producto=aux.getValue().getApriori();
            for(int c=0;c<patron.getCaracteristicas().length;c++){
            distribucion[r][c]= calcularDN(patron.getCaracteristicas()[c],media.getCaracteristicas()[c],varianza.getCaracteristicas()[c]);
+           producto*=distribucion[r][c];
            }
+           evidencia+=producto;
            r++;
        }
+       double psMayor = -1;
+       r = 0;
+       String clase ="";
+       for(Entry<String,ClaseBayes> aux: this.clases.entrySet()){
+           double producto=aux.getValue().getApriori();
+           for(int c=0;c<patron.getCaracteristicas().length;c++){
+           producto*=distribucion[r][c];
+           }
+            r++;
+           producto/=evidencia;
+           // verficamos si es el mayor
+           if(producto>psMayor){
+           psMayor = producto;    
+           clase = aux.getKey();
+           }
+       }
+       patron.setClaseResultante(clase);
        System.out.println();
-       // evidencia
-       // calculan las probabilidades a posteriori
-       // el argumento maximo de las a posteriori define la clase resultante 
-       
+             
     }
 
     private double calcularDN(double c, double m, double v) {
-        double aux = -1.0*(Math.pow(c-m,2)/2.0*v);
-        double res = (1.0/Math.sqrt(2*Math.PI*v))*Math.exp(aux);
-         
+        
+        double div = 1/(Math.sqrt(2*Math.PI*v));
+        double exp = Math.exp(-1*((Math.pow(c-m, 2))/(2*v)));
+        double res = (div)*(exp); 
         return res;
      
     }

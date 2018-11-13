@@ -43,7 +43,7 @@ public class ClaseBayes {
            this.media.getCaracteristicas()[x]/=numInstancias;
        }
     }
-    public void calcularApriori(int aux){
+    public void calcularApriori(double aux){
         this.apriori = this.numInstancias/aux;
     }
     public void calcularVarianza(double[] patron){
